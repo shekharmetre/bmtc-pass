@@ -6,34 +6,43 @@ export function useLocalStorageOnce<T>(key: string, fallback: T) {
   const [value, setValue] = useState<T>(fallback);
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // 🚀 prevent SSR crash
+    if (typeof window === "undefined") return; // SSR safe
 
-    // Check if loaded once per session
-    const loaded = sessionStorage.getItem(`__loaded_${key}`);
+    let initial: T = fallback;
 
-    if (!loaded) {
-      sessionStorage.setItem(`__loaded_${key}`, "yes");
+    try {
+      const loaded = window.sessionStorage.getItem(`__loaded_${key}`);
 
-      try {
-        const raw = localStorage.getItem(key);
-        setValue(raw ? JSON.parse(raw) : fallback);
-      } catch {
-        setValue(fallback);
+      if (!loaded) {
+        // first time this session
+        window.sessionStorage.setItem(`__loaded_${key}`, "yes");
+
+        const raw = window.localStorage.getItem(key);
+        initial = raw ? JSON.parse(raw) : fallback;
+      } else {
+        // already loaded once this session
+        const raw = window.localStorage.getItem(key);
+        initial = raw ? JSON.parse(raw) : fallback;
       }
-    } else {
-      try {
-        const raw = localStorage.getItem(key);
-        setValue(raw ? JSON.parse(raw) : fallback);
-      } catch {
-        setValue(fallback);
-      }
+    } catch {
+      initial = fallback;
     }
-  }, [key, fallback]);
+
+    // Set only after reading to avoid flashing fallback value
+    setValue(initial);
+
+    // ⚠️ fallback removed from deps to prevent re-running effect
+  }, [key]);
 
   const save = (val: T) => {
     setValue(val);
+
     if (typeof window !== "undefined") {
-      localStorage.setItem(key, JSON.stringify(val));
+      try {
+        window.localStorage.setItem(key, JSON.stringify(val));
+      } catch {
+        // ignore write errors
+      }
     }
   };
 

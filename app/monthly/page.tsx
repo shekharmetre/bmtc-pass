@@ -17,7 +17,7 @@ import { title } from "process"
 import { useLocalStorageOnce } from "@/lib/hooks/useLocalStorageOnce"
 import PhonePeQRScanner from "@/components/reatScaner"
 import LiveQR from "@/components/reatScaner"
-import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/components/ui/dialog"
 
 interface ValidatedData {
     title: string;
@@ -215,30 +215,7 @@ const Monthly = () => {
                     }}
                 />
 
-                <Dialog open={open} onOpenChange={onOpenChange}>
-                    <DialogOverlay className="bg-black/60 fixed inset-0 border-none" />
 
-                    <DialogContent
-                        className="bg-transparent border-none shadow-none p-0 outline-none"
-                    >
-               
-                        <button
-                            onClick={() => onOpenChange(false)}
-                            className="absolute -top-20 right-4 text-white bg-transparent p-3 rounded-full border"
-                        >
-                       <X size={20} className="" />
-                        </button>
-
-                        {/* Center Image */}
-                        <Image
-                            src={getValueFromArray(data, "image", "desc")!}
-                            alt="user-profile"
-                            width={144}
-                            height={144}
-                            className="w-36 h-72 object-cover mx-auto mt-20"
-                        />
-                    </DialogContent>
-                </Dialog>
 
 
             </div>
