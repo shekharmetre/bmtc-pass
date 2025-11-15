@@ -1,37 +1,40 @@
-'use client'
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 
 export function useLocalStorageOnce<T>(key: string, fallback: T) {
-  const [value, setValue] = useState<T | null>(() => {
-  
-    // first visit?
+  const [value, setValue] = useState<T>(fallback);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return; // 🚀 prevent SSR crash
+
+    // Check if loaded once per session
     const loaded = sessionStorage.getItem(`__loaded_${key}`);
 
     if (!loaded) {
-      // mark as loaded
       sessionStorage.setItem(`__loaded_${key}`, "yes");
 
-      // load from localStorage ONLY once
       try {
         const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
+        setValue(raw ? JSON.parse(raw) : fallback);
       } catch {
-        return fallback;
+        setValue(fallback);
+      }
+    } else {
+      try {
+        const raw = localStorage.getItem(key);
+        setValue(raw ? JSON.parse(raw) : fallback);
+      } catch {
+        setValue(fallback);
       }
     }
-
-    // if refreshed → return latest saved value (no reload)
-    try {
-      const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
-    } catch {
-      return fallback;
-    }
-  });
+  }, [key, fallback]);
 
   const save = (val: T) => {
-    setValue(val);  
-    localStorage.setItem(key, JSON.stringify(val)); // always save manually
+    setValue(val);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, JSON.stringify(val));
+    }
   };
 
   return [value, save] as const;
