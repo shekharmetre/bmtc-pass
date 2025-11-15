@@ -113,10 +113,15 @@ const Monthly = () => {
                     <div className="h-px mt-4 mb-1 w-full bg-[repeating-linear-gradient(to_right,#9CA3AF_0,#9CA3AF_4px,transparent_4px,transparent_8px)]"></div>
                     <div className="relative">
                         <div>
-                            {data.map((item, index) => <label className="flex flex-col mt-2" key={index}>
-                                <span className=" text-[#323F50]/70 text-[14px] ">{item.title}</span>
-                                <span className="text-[16px] -mt-1 text-gray-650 font-normal">{item.desc}</span>
-                            </label>)}
+                            {data.map((item, index) =>
+    item.title !== "image" && (
+        <label className="flex flex-col mt-2" key={index}>
+            <span className=" text-[#323F50]/70 text-[14px]">{item.title}</span>
+            <span className="text-[16px] -mt-1 text-gray-650 font-normal">{item.desc}</span>
+        </label>
+    )
+)}
+
                             {/* #c8e6c9 */}
                         </div>
                         {getValueFromArray(data, "image", "desc") ? (
@@ -139,7 +144,7 @@ const Monthly = () => {
                             />
                         )}
 
-                        <label className="absolute -bottom-8 right-0 flex flex-col mt-2">
+                        <label className="absolute bottom-0 right-0 flex flex-col mt-2">
                             <span className=" text-[#323F50]/70 text-[16px] underline underline-offset-4 font-medium">Pass fare</span>
                             <span className="text-[19px] font-medium text-black">₹ 1200.0</span>
                         </label>
