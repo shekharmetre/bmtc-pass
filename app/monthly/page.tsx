@@ -141,7 +141,7 @@ const Monthly = () => {
 
                         <label className="absolute bottom-0 right-0 flex flex-col mt-2">
                             <span className=" text-[#323F50]/70 text-[16px] underline underline-offset-4 font-medium">Pass fare</span>
-                            <span className="text-[19px] font-medium text-gray-700">₹ 1200.0</span>
+                            <span className="text-[19px] font-medium text-black">₹ 1200.0</span>
                         </label>
                     </div>
                     <div className="h-px mt-4 mb-3 w-full bg-[repeating-linear-gradient(to_right,#9CA3AF_0,#9CA3AF_4px,transparent_4px,transparent_8px)]"></div>
