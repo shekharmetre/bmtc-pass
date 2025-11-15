@@ -139,7 +139,7 @@ const Monthly = () => {
                             />
                         )}
 
-                        <label className="absolute bottom-0 right-0 flex flex-col mt-2">
+                        <label className="absolute -bottom-8 right-0 flex flex-col mt-2">
                             <span className=" text-[#323F50]/70 text-[16px] underline underline-offset-4 font-medium">Pass fare</span>
                             <span className="text-[19px] font-medium text-black">₹ 1200.0</span>
                         </label>
